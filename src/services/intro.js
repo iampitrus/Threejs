@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 export function renderCube() {
   const scene = new THREE.Scene();
@@ -29,5 +30,20 @@ export function renderCube() {
   const canvas = document.querySelector("canvas.threejs");
   const renderer = new THREE.WebGLRenderer({ canvas });
 
-  renderer.render(scene, camera);
+  // Initialize the orbit controls
+  const controls = new OrbitControls(camera, canvas);
+  controls.autoRotate = true;
+  controls.enableDamping = true;
+
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  // incharge of triggering a render when we have a new image
+  // window.requestAnimationFrame(renderloop);
+  const renderloop = () => {
+    controls.update();
+    renderer.render(scene, camera);
+    window.requestAnimationFrame(renderloop);
+  };
+
+  renderloop();
 }
