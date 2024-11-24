@@ -23,7 +23,7 @@ export function renderCube() {
     30
   );
 
-  const aspectRatio = window.innerWidth / window.innerHeight;
+  //   const aspectRatio = window.innerWidth / window.innerHeight;
 
   //   const camera = new THREE.OrthographicCamera(
   //     -1 * aspectRatio,
@@ -39,7 +39,9 @@ export function renderCube() {
 
   // Renderer - combines the scene and the camera to display info
   const canvas = document.querySelector("canvas.threejs");
-  const renderer = new THREE.WebGLRenderer({ canvas });
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  const maxPixelRatio = Math.min(window.devicePixelRatio, 1.5);
+  renderer.setPixelRatio(maxPixelRatio);
 
   // we have orbitControl, pointerLockControl, trackballControls, dragControls
 
@@ -54,6 +56,8 @@ export function renderCube() {
 
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
+
+  // antialiasing
 
   // incharge of triggering a render when we have a new image
   // window.requestAnimationFrame(renderloop);
