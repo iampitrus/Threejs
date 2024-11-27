@@ -7,7 +7,7 @@ export function renderCube() {
 
   // add objects to the scene
   const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-  const cubeMaterial = new THREE.MeshBasicMaterial({ color: "red" });
+  const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 
   const cubeMesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
   const cubeMesh2 = new THREE.Mesh(cubeGeometry, cubeMaterial);
