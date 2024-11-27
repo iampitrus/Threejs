@@ -11,7 +11,7 @@ export function renderMaterial() {
   const planeGeometry = new THREE.PlaneGeometry(1, 1);
 
   //   initialize the material
-  const material = new THREE.MeshStandardMaterial();
+  const material = new THREE.MeshPhysicalMaterial();
   material.color = new THREE.Color("green");
 
   pane.addBinding(material, "metalness", {
@@ -20,6 +20,16 @@ export function renderMaterial() {
     step: 0.01,
   });
   pane.addBinding(material, "roughness", {
+    min: 0,
+    max: 1,
+    step: 0.01,
+  });
+  pane.addBinding(material, "reflectivity", {
+    min: 0,
+    max: 1,
+    step: 0.01,
+  });
+  pane.addBinding(material, "clearcoat", {
     min: 0,
     max: 1,
     step: 0.01,
