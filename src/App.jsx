@@ -1,13 +1,10 @@
 import { useEffect } from "react";
 import "./App.css";
-import { renderCube } from "./services/intro";
-import { renderBuffer } from "./services/buffer";
-import { renderMaterial } from "./services/material";
+import { renderTexture } from "./lessons/texture";
 
 function App() {
   useEffect(() => {
-    // renderCube();
-    renderMaterial();
+    renderTexture();
   }, []);
 
   return <canvas className="threejs"></canvas>;
