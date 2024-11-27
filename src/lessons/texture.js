@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { Pane } from "tweakpane";
-// freepbr.com
+// freepbr.com -for free 3d models
 
 export function renderTexture() {
   const scene = new THREE.Scene();
@@ -17,42 +17,29 @@ export function renderTexture() {
   const cylinderGeometry = new THREE.CylinderGeometry(0.5, 0.5, 1, 32);
 
   // initialize the texture
-  const textureTest = textureLoader.load(
-    "/assets/textures/whispy-grass-meadow-bl/wispy-grass-meadow_albedo.png"
+  const grassTexture = textureLoader.load(
+    "/assets/textures/badlands-boulders-bl/badlands-boulders_albedo.png"
   );
-  console.log(textureTest);
+  grassTexture.repeat.set(10, 10);
+  grassTexture.wrapS = THREE.MirroredRepeatWrapping;
+  grassTexture.wrapT = THREE.MirroredRepeatWrapping;
 
   //   initialize the material
   const material = new THREE.MeshBasicMaterial();
   // material.color = new THREE.Color("white");
-  material.map = textureTest;
-
-  const mesh = new THREE.Mesh(cubeGeometry, material);
-  const torus = new THREE.Mesh(torusKnotGeometry, material);
-  torus.position.x = 1.5;
+  material.map = grassTexture;
 
   const plane = new THREE.Mesh(planeGeometry, material);
-  plane.position.x = -1.5;
 
-  const sphere = new THREE.Mesh();
-  sphere.geometry = sphereGeometry;
-  sphere.material = material;
-  sphere.position.y = 1.5;
-
-  const cylinder = new THREE.Mesh();
-  cylinder.geometry = cylinderGeometry;
-  cylinder.material = material;
-  cylinder.position.y = -1.5;
-
-  scene.add(mesh, torus, plane, sphere, cylinder);
+  scene.add(plane);
 
   //   initialize the light
 
   const camera = new THREE.PerspectiveCamera(
-    35,
+    20,
     window.innerWidth / window.innerHeight,
     0.1,
-    200
+    2000
   );
 
   // shift the camera back on the z axis
@@ -85,11 +72,11 @@ export function renderTexture() {
   // window.requestAnimationFrame(renderloop);
   const renderloop = () => {
     // make everything rotate
-    scene.children.forEach((child) => {
-      if (child instanceof THREE.Mesh) {
-        child.rotation.y += 0.02;
-      }
-    });
+    // scene.children.forEach((child) => {
+    //   if (child instanceof THREE.Mesh) {
+    //     child.rotation.y += 0.02;
+    //   }
+    // });
 
     controls.update();
     renderer.render(scene, camera);
