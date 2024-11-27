@@ -1,10 +1,14 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { Pane } from "tweakpane";
+// freepbr.com
 
 export function renderTexture() {
   const scene = new THREE.Scene();
   const pane = new Pane();
+
+  //   initialize the textureloader
+  const textureLoader = new THREE.TextureLoader();
 
   const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
   const torusKnotGeometry = new THREE.TorusKnotGeometry(0.5, 0.15, 100, 16);
@@ -12,9 +16,16 @@ export function renderTexture() {
   const sphereGeometry = new THREE.SphereGeometry(0.5, 32, 32);
   const cylinderGeometry = new THREE.CylinderGeometry(0.5, 0.5, 1, 32);
 
+  // initialize the texture
+  const textureTest = textureLoader.load(
+    "/assets/textures/whispy-grass-meadow-bl/wispy-grass-meadow_albedo.png"
+  );
+  console.log(textureTest);
+
   //   initialize the material
-  const material = new THREE.MeshPhysicalMaterial();
-  material.color = new THREE.Color("green");
+  const material = new THREE.MeshBasicMaterial();
+  // material.color = new THREE.Color("white");
+  material.map = textureTest;
 
   const mesh = new THREE.Mesh(cubeGeometry, material);
   const torus = new THREE.Mesh(torusKnotGeometry, material);
@@ -36,12 +47,6 @@ export function renderTexture() {
   scene.add(mesh, torus, plane, sphere, cylinder);
 
   //   initialize the light
-  const light = new THREE.AmbientLight(0xffffff, 0.5);
-  scene.add(light);
-
-  const pointLight = new THREE.PointLight(0xffffff, 50);
-  pointLight.position.set(5, 5, 5);
-  scene.add(pointLight);
 
   const camera = new THREE.PerspectiveCamera(
     35,
@@ -82,7 +87,7 @@ export function renderTexture() {
     // make everything rotate
     scene.children.forEach((child) => {
       if (child instanceof THREE.Mesh) {
-        child.rotation.x += 0.05;
+        child.rotation.y += 0.02;
       }
     });
 
