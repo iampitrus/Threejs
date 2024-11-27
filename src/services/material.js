@@ -1,17 +1,29 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { Pane } from "tweakpane";
 
 export function renderMaterial() {
   const scene = new THREE.Scene();
+  const pane = new Pane();
 
   const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
   const torusKnotGeometry = new THREE.TorusKnotGeometry(0.5, 0.15, 100, 16);
   const planeGeometry = new THREE.PlaneGeometry(1, 1);
 
-  //   const material = new THREE.MeshLambertMaterial();
-  const material = new THREE.MeshPhongMaterial();
-  material.shininess = 100;
-  material.color = new THREE.Color("red");
+  //   initialize the material
+  const material = new THREE.MeshStandardMaterial();
+  material.color = new THREE.Color("green");
+
+  pane.addBinding(material, "metalness", {
+    min: 0,
+    max: 1,
+    step: 0.01,
+  });
+  pane.addBinding(material, "roughness", {
+    min: 0,
+    max: 1,
+    step: 0.01,
+  });
 
   const mesh = new THREE.Mesh(cubeGeometry, material);
   const mesh2 = new THREE.Mesh(torusKnotGeometry, material);
@@ -25,8 +37,8 @@ export function renderMaterial() {
   scene.add(plane);
 
   //   initialize the light
-  const light = new THREE.AmbientLight(0xffffff, 0.1);
-  //   scene.add(light);
+  const light = new THREE.AmbientLight(0xffffff, 0.5);
+  scene.add(light);
 
   const pointLight = new THREE.PointLight(0xffffff, 50);
   pointLight.position.set(5, 5, 5);
