@@ -5,35 +5,38 @@ export function renderMaterial() {
   const scene = new THREE.Scene();
 
   const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+  const torusKnotGeometry = new THREE.TorusKnotGeometry(0.5, 0.15, 100, 16);
   const planeGeometry = new THREE.PlaneGeometry(1, 1);
 
-  const material = new THREE.MeshBasicMaterial();
-
-  material.color = new THREE.Color(0x00ff00);
-  //   material.transparent = true;
-  //   material.opacity = 0.5;
-  material.side = THREE.DoubleSide;
-
-  const fog = new THREE.Fog(0xffffff, 1, 10);
-  scene.fog = fog;
-  scene.background = new THREE.Color(0xffffff);
+  //   const material = new THREE.MeshLambertMaterial();
+  const material = new THREE.MeshPhongMaterial();
+  material.shininess = 100;
+  material.color = new THREE.Color("red");
 
   const mesh = new THREE.Mesh(cubeGeometry, material);
-  const mesh2 = new THREE.Mesh(cubeGeometry, material);
-  const mesh3 = new THREE.Mesh(planeGeometry, material);
+  const mesh2 = new THREE.Mesh(torusKnotGeometry, material);
+  const plane = new THREE.Mesh(planeGeometry, material);
 
   mesh2.position.x = 1.5;
-  mesh3.position.x = -1.5;
+  plane.position.x = -1.5;
 
   scene.add(mesh);
   scene.add(mesh2);
-  scene.add(mesh3);
+  scene.add(plane);
+
+  //   initialize the light
+  const light = new THREE.AmbientLight(0xffffff, 0.1);
+  //   scene.add(light);
+
+  const pointLight = new THREE.PointLight(0xffffff, 50);
+  pointLight.position.set(5, 5, 5);
+  scene.add(pointLight);
 
   const camera = new THREE.PerspectiveCamera(
-    50,
+    35,
     window.innerWidth / window.innerHeight,
     0.1,
-    30
+    200
   );
 
   // shift the camera back on the z axis
@@ -44,6 +47,9 @@ export function renderMaterial() {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
 
   renderer.setSize(window.innerWidth, window.innerHeight);
+
+  const maxPixelRatio = Math.min(window.devicePixelRatio, 1.5);
+  renderer.setPixelRatio(maxPixelRatio);
 
   // we have orbitControl, pointerLockControl, trackballControls, dragControls
 
