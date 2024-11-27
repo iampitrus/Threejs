@@ -1,27 +1,34 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-export function renderBuffer() {
+export function renderMaterial() {
   const scene = new THREE.Scene();
 
-  //   create c ustom geometry
-  const vertices = new Float32Array([0, 0, 0, 0, 2, 0, 2, 0, 0]);
-  const bufferAttr = new THREE.BufferAttribute(vertices, 3);
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute("position", bufferAttr);
+  const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+  const planeGeometry = new THREE.PlaneGeometry(1, 1);
 
-  const cubeMaterial = new THREE.MeshBasicMaterial({
-    color: "red",
-  });
-  const cubeMesh = new THREE.Mesh(geometry, cubeMaterial);
+  const material = new THREE.MeshBasicMaterial();
 
-  const axesHelper = new THREE.AxesHelper(2);
-  cubeMesh.add(axesHelper);
+  material.color = new THREE.Color(0x00ff00);
+  //   material.transparent = true;
+  //   material.opacity = 0.5;
+  material.side = THREE.DoubleSide;
 
-  scene.add(cubeMesh);
-  // The Camera - Determines what is viewed
-  // inside camera - const camera = new THREE.PerspectiveCamera(fov,aspect-ratio,near,far)
-  // fov - field of view, it's just like a zoom, it's measured in degree, the smaller the value, the more the zoom
+  const fog = new THREE.Fog(0xffffff, 1, 10);
+  scene.fog = fog;
+  scene.background = new THREE.Color(0xffffff);
+
+  const mesh = new THREE.Mesh(cubeGeometry, material);
+  const mesh2 = new THREE.Mesh(cubeGeometry, material);
+  const mesh3 = new THREE.Mesh(planeGeometry, material);
+
+  mesh2.position.x = 1.5;
+  mesh3.position.x = -1.5;
+
+  scene.add(mesh);
+  scene.add(mesh2);
+  scene.add(mesh3);
+
   const camera = new THREE.PerspectiveCamera(
     50,
     window.innerWidth / window.innerHeight,
@@ -37,9 +44,6 @@ export function renderBuffer() {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
 
   renderer.setSize(window.innerWidth, window.innerHeight);
-
-  const maxPixelRatio = Math.min(window.devicePixelRatio, 1.5);
-  renderer.setPixelRatio(maxPixelRatio);
 
   // we have orbitControl, pointerLockControl, trackballControls, dragControls
 
