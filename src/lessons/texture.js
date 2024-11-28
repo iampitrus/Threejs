@@ -11,39 +11,77 @@ export function renderTexture() {
   const textureLoader = new THREE.TextureLoader();
 
   const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-  const torusKnotGeometry = new THREE.TorusKnotGeometry(0.5, 0.15, 100, 16);
+  const knotGeometry = new THREE.TorusKnotGeometry(0.5, 0.15, 100, 16);
   const planeGeometry = new THREE.PlaneGeometry(1, 1);
   const sphereGeometry = new THREE.SphereGeometry(0.5, 32, 32);
   const cylinderGeometry = new THREE.CylinderGeometry(0.5, 0.5, 1, 32);
 
   // initialize the texture
-  const grassTexture = textureLoader.load(
-    "/assets/textures/badlands-boulders-bl/badlands-boulders_albedo.png"
+  const grassAlbedo = textureLoader.load(
+    "/assets/textures/whispy-grass-meadow-bl/wispy-grass-meadow_albedo.png"
   );
-  grassTexture.repeat.set(10, 10);
-  grassTexture.wrapS = THREE.MirroredRepeatWrapping;
-  grassTexture.wrapT = THREE.MirroredRepeatWrapping;
+  const grassAo = textureLoader.load(
+    "/assets/textures/whispy-grass-meadow-bl/wispy-grass-meadow_ao.png"
+  );
+  const grassHeight = textureLoader.load(
+    "/assets/textures/whispy-grass-meadow-bl/wispy-grass-meadow_height.png"
+  );
+  const grassMetallic = textureLoader.load(
+    "/assets/textures/whispy-grass-meadow-bl/wispy-grass-meadow_metallic.png"
+  );
+  const grassNormal = textureLoader.load(
+    "/assets/textures/whispy-grass-meadow-bl/wispy-grass-meadow_normal-ogl.png"
+  );
+  const grassRoughness = textureLoader.load(
+    "/assets/textures/whispy-grass-meadow-bl/wispy-grass-meadow_roughness.png"
+  );
 
   //   initialize the material
-  const material = new THREE.MeshBasicMaterial();
-  // material.color = new THREE.Color("white");
-  material.map = grassTexture;
+  const material = new THREE.MeshStandardMaterial();
+  material.map = grassAlbedo;
+  material.roughnessMap = grassRoughness;
+  material.metalnessMap = grassMetallic;
+  material.normalMap = grassNormal; // simulate rough area, so it looks rough
+  material.displacementMap = grassHeight; // change shape
+  material.displacementScale = 0.1;
+
+  const cube = new THREE.Mesh(cubeGeometry, material);
 
   const plane = new THREE.Mesh(planeGeometry, material);
+  plane.position.x = -1.5;
 
-  scene.add(plane);
+  const knot = new THREE.Mesh(knotGeometry, material);
+  knot.position.x = 1.5;
 
-  //   initialize the light
+  const cylinder = new THREE.Mesh(cylinderGeometry, material);
+  cylinder.position.y = -1.5;
 
+  const sphere = new THREE.Mesh(sphereGeometry, material);
+  sphere.position.y = 1.5;
+
+  scene.add(plane, knot, cube, sphere, cylinder);
+
+  // initialize the light
   const camera = new THREE.PerspectiveCamera(
-    20,
+    40,
     window.innerWidth / window.innerHeight,
-    0.1,
+    0.01,
     2000
   );
 
   // shift the camera back on the z axis
   camera.position.z = 5;
+
+  // light
+  const light = new THREE.AmbientLight("white", 0.5);
+  scene.add(light);
+
+  const pointLight = new THREE.PointLight("white", 2);
+  pointLight.position.z = 1;
+  pointLight.position.x = 1;
+  pointLight.position.y = 1;
+
+  scene.add(pointLight);
 
   // Renderer - combines the scene and the camera to display info
   const canvas = document.querySelector("canvas.threejs");
