@@ -111,13 +111,38 @@ export function renderProject() {
     },
   ];
 
-  // initialize the light
-  const light = new THREE.AmbientLight(0xffffff, 1);
-  scene.add(light);
+  const createPlanet = (planet) => {
+    // create the mesh and add it to the scene
+    const planetMesh = new THREE.Mesh(sphereGeometry, planet.material);
+    planetMesh.scale.setScalar(planet.radius);
+    planetMesh.position.x = planet.distance;
+    return planetMesh;
+  };
 
-  const pointLight = new THREE.PointLight(0xffffff, 200);
-  pointLight.position.set(5, 5, 5);
-  scene.add(pointLight);
+  const createMoon = (moon) => {
+    // create the mesh and add it to the scene
+    const moonMesh = new THREE.Mesh(sphereGeometry, moonMaterial);
+    moonMesh.scale.setScalar(moon.radius);
+    moonMesh.position.x = moon.distance;
+    return moonMesh;
+  };
+
+  const planetMeshes = planets.map((planet) => {
+    const planetMesh = createPlanet(planet);
+    // add it to our scene
+    scene.add(planetMesh);
+
+    // loop through each moon and create the moon
+    planet.moons.forEach((moon) => {
+      const moonMesh = createMoon(moon);
+      planetMesh.add(moonMesh);
+    });
+    return planetMesh;
+  });
+
+  // initialize the light
+  const light = new THREE.AmbientLight(0xffffff, 0.5);
+  scene.add(light);
 
   // initialize the camera
   const camera = new THREE.PerspectiveCamera(
