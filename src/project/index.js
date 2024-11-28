@@ -43,8 +43,8 @@ export function renderProject() {
     0.1,
     400
   );
-  camera.position.z = 100;
-  camera.position.y = 5;
+  camera.position.y = 100;
+  camera.position.z = 5;
 
   // initialize the renderer
   const canvas = document.querySelector("canvas.threejs");
@@ -65,8 +65,23 @@ export function renderProject() {
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
 
+  //   initialize the clock
+  const clock = new THREE.Clock();
+  const solarOrbitRadius = 10;
+  const moonOrbitRadius = 2;
   // render the scene
   const renderloop = () => {
+    const elapsedTime = clock.getElapsedTime();
+
+    // add animation here
+    earth.rotation.y += 0.01;
+
+    earth.position.x = Math.sin(elapsedTime) * solarOrbitRadius;
+    earth.position.z = Math.cos(elapsedTime) * solarOrbitRadius;
+
+    moon.position.x = Math.sin(elapsedTime) * moonOrbitRadius;
+    moon.position.z = Math.cos(elapsedTime) * moonOrbitRadius;
+
     controls.update();
     renderer.render(scene, camera);
     window.requestAnimationFrame(renderloop);
