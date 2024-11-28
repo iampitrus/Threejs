@@ -10,11 +10,35 @@ export function renderTexture() {
   //   initialize the textureloader
   const textureLoader = new THREE.TextureLoader();
 
+  // initialize the geometry
   const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+  const uvCube = new THREE.BufferAttribute(cubeGeometry.attributes.uv.array, 2);
+  cubeGeometry.setAttribute("uv2", uvCube);
+
   const knotGeometry = new THREE.TorusKnotGeometry(0.5, 0.15, 100, 16);
+  const uvKnot = new THREE.BufferAttribute(knotGeometry.attributes.uv.array, 2);
+  knotGeometry.setAttribute("uv2", uvKnot);
+
   const planeGeometry = new THREE.PlaneGeometry(1, 1);
+  const uvPlane = new THREE.BufferAttribute(
+    planeGeometry.attributes.uv.array,
+    2
+  );
+  planeGeometry.setAttribute("uv2", uvPlane);
+
   const sphereGeometry = new THREE.SphereGeometry(0.5, 32, 32);
+  const uvSphere = new THREE.BufferAttribute(
+    sphereGeometry.attributes.uv.array,
+    2
+  );
+  sphereGeometry.setAttribute("uv2", uvSphere);
+
   const cylinderGeometry = new THREE.CylinderGeometry(0.5, 0.5, 1, 32);
+  const uvCylinder = new THREE.BufferAttribute(
+    cylinderGeometry.attributes.uv.array,
+    2
+  );
+  cylinderGeometry.setAttribute("uv2", uvCylinder);
 
   // initialize the texture
   const grassAlbedo = textureLoader.load(
@@ -44,6 +68,7 @@ export function renderTexture() {
   material.normalMap = grassNormal; // simulate rough area, so it looks rough
   material.displacementMap = grassHeight; // change shape
   material.displacementScale = 0.1;
+  material.aoMap = grassAo; // help shadow cast on objects close
 
   const cube = new THREE.Mesh(cubeGeometry, material);
 
