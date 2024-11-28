@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import "./App.css";
-import { renderTexture } from "./lessons/texture";
+import { renderProject } from "./project";
 
 function App() {
   useEffect(() => {
-    renderTexture();
+    renderProject();
   }, []);
 
   return <canvas className="threejs"></canvas>;
