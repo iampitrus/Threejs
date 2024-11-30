@@ -166,6 +166,8 @@ export function renderProject() {
   // instantiate the controls
   const controls = new OrbitControls(camera, canvas);
   controls.enableDamping = true;
+  controls.maxDistance = 200;
+  controls.minDistance = 20;
 
   window.addEventListener("resize", () => {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -184,12 +186,12 @@ export function renderProject() {
 
       planet.children.forEach((moon, moonIndex) => {
         moon.rotation.y += planets[planetIndex].moons[moonIndex].speed;
-        moon.rotation.x =
+        moon.position.x =
           Math.sin(moon.rotation.y) *
-          planets[planetIndex].moons[moonIndex].speed;
-        moon.rotation.z =
+          planets[planetIndex].moons[moonIndex].distance;
+        moon.position.z =
           Math.cos(moon.rotation.y) *
-          planets[planetIndex].moons[moonIndex].speed;
+          planets[planetIndex].moons[moonIndex].distance;
       });
     });
 
