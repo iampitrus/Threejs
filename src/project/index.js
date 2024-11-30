@@ -12,6 +12,8 @@ export function renderProject() {
 
   // add textureLoader
   const textureLoader = new THREE.TextureLoader();
+  const cubeTextureLoader = new THREE.CubeTextureLoader();
+  cubeTextureLoader.setPath("/assets/textures/cubeMap/");
 
   // add textures
   const sunTexture = textureLoader.load("assets/textures/2k_sun.jpg");
@@ -30,6 +32,16 @@ export function renderProject() {
   //   marsTexture.colorSpace = THREE.SRGBColorSpace;
   const moonTexture = textureLoader.load("assets/textures/2k_moon.jpg");
   //   moonTexture.colorSpace = THREE.SRGBColorSpace;
+  const backgroundCubeMap = cubeTextureLoader.load([
+    "px.png",
+    "nx.png",
+    "py.png",
+    "ny.png",
+    "pz.png",
+    "nz.png",
+  ]);
+
+  scene.background = backgroundCubeMap;
 
   //   add materials
   const mercuryMaterial = new THREE.MeshStandardMaterial({
@@ -141,8 +153,11 @@ export function renderProject() {
   });
 
   // initialize the light
-  const light = new THREE.AmbientLight(0xffffff, 0.5);
+  const light = new THREE.AmbientLight(0xffffff, 0.1);
   scene.add(light);
+
+  const pointLight = new THREE.PointLight(0xffffff, 200);
+  scene.add(pointLight);
 
   // initialize the camera
   const camera = new THREE.PerspectiveCamera(
